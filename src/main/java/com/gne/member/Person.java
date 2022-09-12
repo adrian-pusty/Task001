@@ -1,31 +1,29 @@
 package com.gne.member;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-public class Person implements Serializable{
+import java.util.Objects;
+
+@AllArgsConstructor
+public class Person implements Serializable
+{
+    @Serial
     private static final long serialVersionUID = -4238320309780264419L;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("mm/DD/yyyy");
+    @Getter
     public String name;
+    @Getter
     public Date birthDate;
+    @Getter
     public boolean gender;
     public Person father;
     public Person mother;
-    public Person(String name, Date birthdate, boolean gender, Person father, Person mother){
-        this.name = name;
-        this.birthDate = birthdate;
-        this.gender = gender;
-        this.father = father;
-        this.mother = mother;
-    }
-    public String getName() {
-        return name;
-    }
-    public Date getBirthDate() {
-        return birthDate;
-    }
-    public boolean isGender() {
-        return gender;
-    }
+
     public String getFormattedDateOfBirth(){
         try{
             return DATE_FORMAT.format(birthDate);
@@ -40,16 +38,7 @@ public class Person implements Serializable{
     }
     public boolean isAncestorOf(Person person){
         if(person != null) {
-            if(equals(person.father))
-                return true;
-            if(isAncestorOf(person.father)) {
-                return true;
-            }
-            if(equals(person.mother))
-                return true;
-            if(isAncestorOf(person.mother)) {
-                return true;
-            }
+            return equals(person.father) || isAncestorOf(person.father) || equals(person.mother) || isAncestorOf(person.mother);
         }
         return false;
     }
@@ -57,7 +46,7 @@ public class Person implements Serializable{
     public boolean equals(Object o){
         if (o == this) return true;
         if (o instanceof Person)
-            return ((Person) o).name == name
+            return Objects.equals(name, ((Person) o).name)
                     && ((Person) o).birthDate == birthDate;
         return false;
     }
