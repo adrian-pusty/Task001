@@ -20,9 +20,10 @@ create table SERVICE
 (
     id int not null,
     carId int, -- maybe it would be worth to consider creating a join table CAR_CUSTOMER and refer to record from this table because car can change its owner...
-    paidUp date,
-    carReceived date,
+    carReported date,
     carRepaired date,
+    carPaidUp date,
+    carReclaimed date,
     primary key (id),
     foreign key (customerId) references CUSTOMER(id)
 );
