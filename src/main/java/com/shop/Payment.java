@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 public interface Payment
 {
@@ -24,6 +25,8 @@ class PaymentImpl implements Payment
         BigDecimal fraction = BigDecimal.ONE.subtract(creditCardType
                         .getDiscountPercentage()
                         .divide(HUNDRED, MATH_CONTEXT));
-        return shoppingCart.totalPrice().multiply(fraction);
+        return shoppingCart.totalPrice()
+                .multiply(fraction)
+                .setScale(2, RoundingMode.HALF_EVEN);
     }
 }

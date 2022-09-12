@@ -1,30 +1,37 @@
 package com.shop;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface ShoppingCart
 {
-    void addProduct(Product product);
-    void removeProduct(Product product);
+    ShoppingCart addProduct(Product product);
+    ShoppingCart removeProduct(Product product);
     BigDecimal totalPrice();
 }
 
+@NoArgsConstructor
+@AllArgsConstructor
 class ShoppingCartImpl implements ShoppingCart
 {
-    private final List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     @Override
-    public void addProduct(Product product)
+    public ShoppingCart addProduct(Product product)
     {
         products.add(product);
+        return this;
     }
 
     @Override
-    public void removeProduct(Product product)
+    public ShoppingCart removeProduct(Product product)
     {
         products.remove(product);
+        return this;
     }
 
     @Override
