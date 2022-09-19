@@ -1,6 +1,5 @@
 package com.gne.member;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.Serial;
@@ -8,8 +7,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@AllArgsConstructor
-public class Person implements Serializable
+public final class Person implements Serializable
 {
     @Serial
     private static final long serialVersionUID = -4238320309780264419L;
@@ -17,13 +15,21 @@ public class Person implements Serializable
     private static final int YEAR = 365 * 24 * 60 * 1000;
 
     @Getter
-    public String name;
+    private final String name;
+    private final Date birthDate;
     @Getter
-    public Date birthDate;
-    @Getter
-    public boolean gender;
-    public Person father;
-    public Person mother;
+    private final boolean gender;
+    private final Person father;
+    private final Person mother;
+
+    public Person(String name, Date birthDate, boolean gender, Person father, Person mother)
+    {
+        this.name = name;
+        this.birthDate = new Date(birthDate.getTime());
+        this.gender = gender;
+        this.father = father;
+        this.mother = mother;
+    }
 
     public String getFormattedDateOfBirth()
     {
@@ -61,8 +67,19 @@ public class Person implements Serializable
     }
 
     @Override
+    public int hashCode()
+    {
+        return 31 * name.hashCode() * birthDate.hashCode();
+    }
+
+    @Override
     public String toString()
     {
         return getName();
+    }
+
+    public Date getBirthDate()
+    {
+        return new Date(birthDate.getTime());
     }
 }
