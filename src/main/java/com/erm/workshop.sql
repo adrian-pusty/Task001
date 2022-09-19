@@ -27,26 +27,26 @@ create table CAR
     foreign key (customerId) references CUSTOMER(id)
 );
 
-create table SERVICE_TYPE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
+create table SERVICE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
 (
     id int not null,
     primary key (id),
-    carId int,
+    carId int, -- maybe it would be worth to consider creating a join table CAR_CUSTOMER and refer to record from this table because car can change its owner...
     serviceName varchar(255),
     intervalInDays int,
     foreign key (carId) references CAR(id)
 );
 
-create table SERVICE
+create table SERVICE_LOG
 (
     id int not null,
-    carId int, -- maybe it would be worth to consider creating a join table CAR_CUSTOMER and refer to record from this table because car can change its owner...
+    type int,
     carReported date,
     carRepaired date,
     carPaidUp date,
     carReclaimed date,
     primary key (id),
-    foreign key (customerId) references CUSTOMER(id)
+    foreign key (type) references SERVICE(id)
 );
 
 create table WORKER
@@ -57,20 +57,20 @@ create table WORKER
     foreign key (specId) references SPECIALISATION(id)
 );
 
-create table SERVICE_WORKER
+create table SERVICELOG_WORKER
 (
-    serviceId int,
+    serviceLogId int,
     workerId int,
     hoursSpent int,
-    foreign key (serviceId) references SERVICE(id),
+    foreign key (serviceLogId) references SERVICE_LOG(id),
     foreign key (workerId) references WORKER(id)
 );
 
-create table SERVICE_PART
+create table SERVICELOG_PART
 (
-    serviceId int,
+    serviceLogId int,
     partId int,
     amount int,
-    foreign key (serviceId) references SERVICE(id),
+    foreign key (serviceLogId) references SERVICE_LOG(id),
     foreign key (partId) references PART(id)
 );
