@@ -36,6 +36,16 @@ create table WORKER
     foreign key (specId) references SPECIALISATION(id)
 );
 
+create table SERVICE_TYPE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
+(
+    id int not null,
+    primary key (id),
+    carId int,
+    serviceName varchar(255),
+    intervalInDays int,
+    foreign key (carId) references CAR(id)
+);
+
 create table CAR
 (
     id int not null,
