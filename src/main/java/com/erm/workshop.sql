@@ -1,19 +1,40 @@
-create table SERVICE_WORKER
+create table PART
 (
-    serviceId int,
-    workerId int,
-    hoursSpent int,
-    foreign key (serviceId) references SERVICE(id),
-    foreign key (workerId) references WORKER(id)
+    id int not null,
+    name varchar(255),
+    price double,
+    primary key (id)
 );
 
-create table SERVICE_PART
+create table CUSTOMER
 (
-    serviceId int,
-    partId int,
-    amount int,
-    foreign key (serviceId) references SERVICE(id),
-    foreign key (partId) references PART(id)
+    id int not null,
+    primary key (id)
+);
+
+create table SPECIALISATION
+(
+    id int not null,
+    name varchar(255),
+    hourlyPay double
+)
+
+create table CAR
+(
+    id int not null,
+    customerId int,
+    primary key (id),
+    foreign key (customerId) references CUSTOMER(id)
+);
+
+create table SERVICE_TYPE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
+(
+    id int not null,
+    primary key (id),
+    carId int,
+    serviceName varchar(255),
+    intervalInDays int,
+    foreign key (carId) references CAR(id)
 );
 
 create table SERVICE
@@ -36,41 +57,20 @@ create table WORKER
     foreign key (specId) references SPECIALISATION(id)
 );
 
-create table SERVICE_TYPE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
+create table SERVICE_WORKER
 (
-    id int not null,
-    primary key (id),
-    carId int,
-    serviceName varchar(255),
-    intervalInDays int,
-    foreign key (carId) references CAR(id)
+    serviceId int,
+    workerId int,
+    hoursSpent int,
+    foreign key (serviceId) references SERVICE(id),
+    foreign key (workerId) references WORKER(id)
 );
 
-create table CAR
+create table SERVICE_PART
 (
-    id int not null,
-    customerId int,
-    primary key (id),
-    foreign key (customerId) references CUSTOMER(id)
+    serviceId int,
+    partId int,
+    amount int,
+    foreign key (serviceId) references SERVICE(id),
+    foreign key (partId) references PART(id)
 );
-
-create table PART
-(
-    id int not null,
-    name varchar(255),
-    price double,
-    primary key (id)
-);
-
-create table CUSTOMER
-(
-    id int not null,
-    primary key (id)
-);
-
-create table SPECIALISATION
-(
-    id int not null,
-    name varchar(255),
-    hourlyPay double
-)
