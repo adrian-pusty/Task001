@@ -3,13 +3,14 @@ package com.shop;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.shop.CreditCardType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PaymentTest
+class PaymentServiceTest
 {
 
     public static final Product bike = Product.builder().name("bike")
@@ -46,14 +47,24 @@ class PaymentTest
         testDiscount(products, GOLD, new BigDecimal("40.44"));
     }
 
+    @Test
+    void testRemoving()
+    {
+        List<Product> products = new ArrayList<>(Arrays.asList(steamGiftCard, amazonGiftCard, bubbleGum, car, window)); // new - to avoid 'java.lang.UnsupportedOperationException: remove'
+
+        PaymentService paymentService = new CreditCardPayment(NORMAL, products);
+        paymentService.removeProduct(car);
+
+        BigDecimal result = paymentService.pay();
+
+        assertEquals(0, result.compareTo(new BigDecimal("1650.55")));
+    }
+
     private void testDiscount(List<Product> products, CreditCardType creditCardType, BigDecimal expected)
     {
-        ShoppingCart shoppingCart = new ShoppingCartImpl(products);
-        Payment payment = PaymentImpl.builder()
-                .creditCardType(creditCardType)
-                .shoppingCart(shoppingCart).build();
+        PaymentService paymentService = new CreditCardPayment(creditCardType, products);
 
-        BigDecimal result = payment.withDiscount();
+        BigDecimal result = paymentService.pay();
 
         assertEquals(0, result.compareTo(expected));
     }
