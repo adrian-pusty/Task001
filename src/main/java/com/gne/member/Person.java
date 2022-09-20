@@ -36,6 +36,7 @@ public final class Person implements Serializable
         return DATE_FORMAT.format(birthDate);
     }
 
+    // todo migrate birthDate type
     public int age()
     {
         long now = System.currentTimeMillis();
