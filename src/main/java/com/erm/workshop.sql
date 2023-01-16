@@ -17,24 +17,31 @@ create table SPECIALISATION
     id int not null,
     name varchar(255),
     hourlyPay double
-)
+);
 
 create table CAR
 (
     id int not null,
-    customerId int,
     primary key (id),
+);
+
+create table CAR_CUSTOMER
+(
+    id int not null,
+    carId int,
+    customerId int,
+    foreign key (carId) references CAR(id),
     foreign key (customerId) references CUSTOMER(id)
 );
 
-create table SERVICE -- table for services that are needed for a specific car, services that have no schedule (like repair after crash) could have interval = -1 or null
+create table SERVICE
 (
     id int not null,
     primary key (id),
-    carId int, -- maybe it would be worth to consider creating a join table CAR_CUSTOMER and refer to record from this table because car can change its owner...
+    carCustomerId int,
     serviceName varchar(255),
     intervalInDays int,
-    foreign key (carId) references CAR(id)
+    foreign key (carCustomerId) references CAR_CUSTOMER(id)
 );
 
 create table SERVICE_LOG
