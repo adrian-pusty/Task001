@@ -16,7 +16,7 @@ public final class Person implements Serializable
 
     @Getter
     private final String name;
-    private final Date birthDate;
+    private final long birthDate;
     @Getter
     private final boolean gender;
     private final Person father;
@@ -25,7 +25,7 @@ public final class Person implements Serializable
     public Person(String name, Date birthDate, boolean gender, Person father, Person mother)
     {
         this.name = name;
-        this.birthDate = new Date(birthDate.getTime());
+        this.birthDate = birthDate.getTime();
         this.gender = gender;
         this.father = father;
         this.mother = mother;
@@ -36,11 +36,10 @@ public final class Person implements Serializable
         return DATE_FORMAT.format(birthDate);
     }
 
-    // todo migrate birthDate type
     public int age()
     {
         long now = System.currentTimeMillis();
-        return (int) ((now - birthDate.getTime()) / YEAR);
+        return (int) ((now - birthDate) / YEAR);
     }
 
     public boolean isAncestorOf(Person person)
@@ -62,7 +61,7 @@ public final class Person implements Serializable
         }
         if (o instanceof Person other)
         {
-            return name.equals(other.name) && birthDate.equals(other.birthDate);
+            return name.equals(other.name) && birthDate == other.birthDate;
         }
         return false;
     }
@@ -70,7 +69,7 @@ public final class Person implements Serializable
     @Override
     public int hashCode()
     {
-        return 31 * name.hashCode() * birthDate.hashCode();
+        return 31 * name.hashCode() * Long.hashCode(birthDate);
     }
 
     @Override
@@ -81,6 +80,6 @@ public final class Person implements Serializable
 
     public Date getBirthDate()
     {
-        return new Date(birthDate.getTime());
+        return new Date(birthDate);
     }
 }
